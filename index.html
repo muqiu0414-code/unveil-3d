@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>UNVEIL®</title>
+  <link rel="icon" href="img/1_vase.webp" />
+  <meta name="description" content="UNVEIL® is a creative studio using artificial intelligence to expand human creativity." />
+  <!-- preload the first few carousel images to start decoding early -->
+  <link rel="preload" as="image" href="img/tiles/000_9-portraits-of-a-vase.webp" />
+  <link rel="preload" as="image" href="img/tiles/001_9-portraits-of-a-vase.webp" />
+  <link rel="preload" as="image" href="img/tiles/002_9-portraits-of-a-vase.webp" />
+  <link rel="preload" as="image" href="img/tiles/003_9-portraits-of-a-vase.webp" />
+</head>
+<body>
+
+  <!-- ===== percentage preloader (like the real site) ===== -->
+  <div id="preloader" class="preloader" aria-hidden="true">
+    <span id="preloader-pct">0%</span>
+  </div>
+
+  <!-- ===== HOME ROUTE ===== -->
+  <div id="home" class="route route-home">
+
+    <!-- WebGL canvas (page never scrolls; wheel drives the carousel) -->
+    <div id="app"><canvas id="scene-canvas"></canvas></div>
+
+    <!-- frosted blur layer above the scene -->
+    <div id="blur-layer" aria-hidden="true"></div>
+
+    <!-- ===== header nav ===== -->
+    <header class="site-header" data-chrome>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a class="nav-btn is-active" href="#/" data-nav-home><span>UNVEIL</span><small>®</small><span>Projects</span></a></li>
+          <li><a class="nav-btn" href="#/research"><span>Research</span></a></li>
+          <li><a class="nav-btn" href="#/studio"><span>Studio</span></a></li>
+          <li><button class="nav-btn" type="button"><span>Contact</span></button></li>
+        </ul>
+      </nav>
+    </header>
+
+    <!-- ===== center / bottom links ===== -->
+    <section class="center-chrome" data-chrome data-chrome-raise>
+      <nav>
+        <ul>
+          <li><a class="pill pill-square" href="mailto:contact@unveil.fr" target="_blank" rel="noopener">contact@unveil.fr</a></li>
+          <li><a class="pill pill-round" href="https://instagram.com/byunveil/" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a class="pill pill-round" href="https://maps.app.goo.gl/yvLUoqpnDYZmS8x56" target="_blank" rel="noopener">25 Rue Henry Monnier, 75009 Paris</a></li>
+        </ul>
+      </nav>
+      <nav class="legal" data-chrome>
+        <a href="#"><span>Cookie Policy</span></a>
+        <a href="#"><span>Privacy Policy</span></a>
+        <a href="#"><span>Legal Notice</span></a>
+      </nav>
+    </section>
+
+    <!-- ===== Overview / Index ===== -->
+    <div class="overview" data-chrome>
+      <button id="btn-overview" type="button">Overview</button>
+      <button id="btn-index" type="button">Index</button>
+    </div>
+
+    <!-- ===== hover label ===== -->
+    <span id="hover-label" class="hover-label" aria-hidden="true"></span>
+
+    <!-- ===== project detail overlay ===== -->
+    <div id="detail" class="detail" role="dialog" aria-modal="true" aria-label="Project">
+      <button id="detail-close" class="detail-close" type="button" aria-label="Close">×</button>
+      <div class="detail-media">
+        <img src="" alt="" />
+      </div>
+      <div class="detail-info">
+        <div class="detail-meta">
+          <span class="detail-year"></span>
+          <span class="detail-tags"></span>
+        </div>
+        <div class="detail-text">
+          <h2 class="detail-title"></h2>
+          <p class="detail-desc"></p>
+        </div>
+        <a class="detail-link" href="#" target="_blank" rel="noopener">View project ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INDEX ROUTE (left: table, right: image) ===== -->
+  <div id="index-page" class="route route-index" aria-label="Index">
+    <header class="site-header">
+      <nav aria-label="Primary">
+        <ul>
+          <li><a class="nav-btn is-active" href="#/" data-nav-home><span>UNVEIL</span><small>®</small><span>Projects</span></a></li>
+          <li><a class="nav-btn" href="#/research"><span>Research</span></a></li>
+          <li><a class="nav-btn" href="#/studio"><span>Studio</span></a></li>
+          <li><button class="nav-btn" type="button"><span>Contact</span></button></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="index-main">
+      <!-- left: project list (UL/LI like the source) -->
+      <section class="index-table-wrap">
+        <div class="index-table-head">
+          <span>Year</span>
+          <span>Project</span>
+          <span>Category</span>
+        </div>
+        <ul id="index-table" class="index-table"></ul>
+      </section>
+      <!-- right: image -->
+      <aside class="index-stage">
+        <div class="index-stage-inner">
+          <img id="index-stage-img" src="" alt="" />
+        </div>
+      </aside>
+    </main>
+
+    <footer class="index-footer">
+      <span>contact@unveil.fr</span>
+      <span>Instagram</span>
+      <span>25 Rue Henry Monnier, 75009 Paris</span>
+    </footer>
+
+    <div class="overview overview-index">
+      <button type="button" data-nav-overview>Overview</button>
+      <button type="button" class="is-active" data-nav-index>Index</button>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

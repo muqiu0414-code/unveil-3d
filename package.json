@@ -1,0 +1,21 @@
+{
+  "name": "unveil-3d",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "UNVEIL® - faithful recreation of unveil.fr: Three.js 3D glass-panel carousel with scroll + hover interactions",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "@types/three": "^0.185.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

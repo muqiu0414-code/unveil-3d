@@ -1,0 +1,17 @@
+# dependencies
+node_modules/
+
+# build output (kept in repo for direct preview; rebuild with pnpm build if edited)
+# dist/
+
+# runtime logs
+_serve.log
+_serve.err.log
+preview*.log
+preview*.err
+
+# os / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

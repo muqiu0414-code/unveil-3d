@@ -1,0 +1,60 @@
+// ============================================================
+// Full project index — all 43 projects from unveil.fr
+// Generated from source data (DatoCMS payload)
+// ============================================================
+
+export interface ProjectFull {
+  id: number;
+  title: string;
+  slug: string;
+  year: string;
+  tags: string[];
+  desc: string;
+  image: string;
+}
+
+export const ALL_PROJECTS: ProjectFull[] = [
+  { id: 0, title: "9 Portraits of a Vase", slug: "9-portraits-of-a-vase", year: "2026", tags: ["AI", "Stills"], desc: "UNVEIL® carte blanche for Mathilde Martin.", image: "img/idx/00_9_portraits_of_a_vase.webp" },
+  { id: 1, title: "Eclipse Shadows", slug: "eclipse-shadows", year: "2026", tags: ["AI", "Stills"], desc: "Eclipse glasses were sold out everywhere. Had to find another way to see it.", image: "img/idx/01_eclipse_shadows.webp" },
+  { id: 2, title: "Sculpted Optics", slug: "sculpted-optics", year: "2026", tags: ["AI", "Stills"], desc: "In-house editorial series. A speculative study of surreal rear lights.", image: "img/idx/02_sculpted_optics.webp" },
+  { id: 3, title: "Runway", slug: "runway", year: "2026", tags: ["AI", "Video", "Advertising"], desc: "Series of capsule films for Runway AI Festival campaign, each with a different creative direction to highlight the versatility of AI filmmaking.", image: "img/idx/03_runway.webp" },
+  { id: 4, title: "Kalash", slug: "kalash", year: "2026", tags: ["AI", "Show Visuals"], desc: "Show visuals for Kalash concert at Plénitude Arena for 40,000 fans - June 12, 2026.", image: "img/idx/04_kalash.webp" },
+  { id: 5, title: "Le K", slug: "le-k", year: "2026", tags: ["AI", "Fashion Design", "Stills"], desc: "Introducing Le K, a jeanswear label born from the collaboration of UNVEIL® and designer Marie Bevillon.", image: "img/idx/05_le_k.webp" },
+  { id: 6, title: "Heliot Emil / SS26", slug: "heliot-emil-ss26", year: "2026", tags: ["AI", "Campaign", "Stills"], desc: "UNVEIL® created the campaign for Heliot Emil SS26 collection, based on Carl Jung’s psychological concept of the shadow.", image: "img/idx/06_heliot_emil_ss26.webp" },
+  { id: 7, title: "47 Voices", slug: "47-voices", year: "2026", tags: ["AI", "Short Film"], desc: "Inside a strange building, a choir performs. Again and again, they gather for a purpose only they seem to understand.", image: "img/idx/07_47_voices.webp" },
+  { id: 8, title: "UNVEIL® Meeting Table", slug: "unveil-meeting-table", year: "2026", tags: ["AI", "Furniture Design", "Campaign"], desc: "A table designed to host in our studio in Paris. Made from a 12 mm thick solid aluminum plate.", image: "img/idx/08_unveil_meeting_table.webp" },
+  { id: 9, title: "Balenciaga", slug: "balenciaga", year: "2026", tags: ["AI", "Social Content"], desc: "For Balenciaga’s Summer 26 collection, UNVEIL® created a series of short videos for social media, set in calm, slightly altered everyday scenes.", image: "img/idx/09_balenciaga.webp" },
+  { id: 10, title: "Nodaleto", slug: "nodaleto", year: "2026", tags: ["AI", "Stills", "Campaign"], desc: "UNVEIL® created Nodaleto’s Pre-Spring 26 AI campaign, set in intimate interiors and stylized domestic scenes with controlled surrealism.", image: "img/idx/10_nodaleto.webp" },
+  { id: 11, title: "Salomon", slug: "salomon-shaping-new-futures", year: "2026", tags: ["AI", "Campaign", "Film"], desc: "For Salomon’s new global campaign, UNVEIL® created a 45s film where a character moves through shifting worlds, blending nature, technology, and imagination.", image: "img/idx/11_salomon_shaping_new_futures.webp" },
+  { id: 12, title: "COHL", slug: "cohl", year: "2026", tags: ["Graphic Identity"], desc: "Graphic identity for COHL, a next-generation company building creative infrastructures for generative AI.", image: "img/idx/12_cohl.webp" },
+  { id: 13, title: "Unfixed", slug: "unfixed", year: "2026", tags: ["AI", "Stills"], desc: "A series of images centered on unstable identity, where the self divides and transforms. The images act as mental states, leaving meaning open.", image: "img/idx/13_unfixed.webp" },
+  { id: 14, title: "DRIFT x Schott NYC", slug: "drift-x-schott-nyc", year: "2026", tags: ["AI", "Campaign", "Stills"], desc: "For DRIFT x Schott NYC, UNVEIL® created a series of images exploring everyday surrealism.", image: "img/idx/14_drift_x_schott_nyc.webp" },
+  { id: 15, title: "444 x UNVEIL®", slug: "444-x-unveil", year: "2025", tags: ["AI", " Book Design", "Stills"], desc: "UNVEIL® translates 444's two-day, 240 km run across Italy into a visual study of exhaustion, hallucination, and forward motion.", image: "img/idx/15_444_x_unveil.webp" },
+  { id: 16, title: "Dries Van Noten Beauty", slug: "dries-van-noten-beauty", year: "2025", tags: ["AI", "Advertising", "Stills"], desc: "Bespoke advertising for Dries Van Noten Beauty @driesvannoten in Beauty Papers, The Hollywood Issue.", image: "img/idx/16_dries_van_noten_beauty.webp" },
+  { id: 17, title: "Oneohtrix Point Never", slug: "oneohtrix-point-never", year: "2025", tags: ["AI", "Music Video"], desc: "For 'Cherry Blue' music video, UNVEIL® used AI to bring Pol Taburet’s drawings to life and shape the film’s rhythm.", image: "img/idx/17_oneohtrix_point_never.webp" },
+  { id: 18, title: "Byredo", slug: "byredo", year: "2025", tags: ["AI", "Stills", "Advertising"], desc: "Bespoke advertising for Byredo in Beauty Papers, The Hollywood Issue.", image: "img/idx/18_byredo.webp" },
+  { id: 19, title: "Heliot Emil / AW25", slug: "heliot-emil-eigengrau", year: "2025", tags: ["AI", "Campaign", "Social Content", "Stills"], desc: "For AW25, Heliot Emil’s Eigengrau dives into dreams and the shared unconscious. UNVEIL® shaped it through three AI films and stills, each a distinct dream.", image: "img/idx/19_heliot_emil_eigengrau.webp" },
+  { id: 20, title: "Not the Day, Nor the Hour", slug: "not-the-day-nor-the-hour", year: "2025", tags: ["AI", "Short Film"], desc: "A short film made entirely with AI in under 48 hours, offering an intimate, personal reading of the prophetic signs said to announce Judgment Day.", image: "img/idx/20_not_the_day_nor_the_hour.webp" },
+  { id: 21, title: "DRIFT / Images", slug: "drift-images", year: "2025", tags: ["AI", "Stills"], desc: "To accompany DRIFT’s debut album, UNVEIL® created 500 AI-generated images exploring a surreal, dreamlike reality “adrift”.", image: "img/idx/21_drift_images.webp" },
+  { id: 22, title: "DRIFT / At the Party", slug: "drift-at-the-party", year: "2025", tags: ["AI", "Music Video"], desc: "Music video for At The Party, the lead single from DRIFT, exploring desire, loneliness, and the blur between a chaotic night and an uncanny feeling.", image: "img/idx/22_drift_at_the_party.webp" },
+  { id: 23, title: "Anthony Calydon", slug: "anthony-calydon", year: "2025", tags: ["AI", "Stills"], desc: "AI Campaign for the new line of products of Anthony Calydon. A botanical reinterpretation of the Denim Bag, combining couture precision and organical elements.", image: "img/idx/23_anthony_calydon.webp" },
+  { id: 24, title: "Puma x Heliot Emil", slug: "puma-x-heliot-emil", year: "2025", tags: ["AI", "Campaign", "Film", "Stills"], desc: "For chapter two of Puma x Heliot Emil, UNVEIL® captures runner’s high through surreal, impossible motion, paired with AI-made BTS that blurs fact and fiction.", image: "img/idx/24_puma_x_heliot_emil.webp" },
+  { id: 25, title: "Neo", slug: "neo", year: "2025", tags: ["AI", "Stills", "Social Content"], desc: "For the launch of the Neo robot by 1X, UNVEIL® reimagines it through AI-generated content, exploring its dystopian potential as a domestic companion.", image: "img/idx/25_neo.webp" },
+  { id: 26, title: "Elias Rønnenfelt", slug: "elias-ronnenfelt-mona-lisa", year: "2025", tags: ["AI", "Music Video"], desc: "Visuals created for the music video 'Mona Lisa' by Elias Rønnenfelt.", image: "img/idx/26_elias_ronnenfelt_mona_lisa.webp" },
+  { id: 27, title: "LCD", slug: "lcd", year: "2025", tags: ["AI", "Campaign", "Stills"], desc: "AI campaign for the new Square Collection of LCD, the jewelry brand founded by Lorette Colé Duprat. A story of lasting love across generations.", image: "img/idx/27_lcd.webp" },
+  { id: 28, title: "Windswept", slug: "windswept", year: "2025", tags: ["AI", "Stills"], desc: "An in-house study of quiet tension between human stillness and natural power, with painterly images where identity and nature slowly merge.", image: "img/idx/28_windswept.webp" },
+  { id: 29, title: "Composites", slug: "composites", year: "2025", tags: ["AI", "Stills"], desc: "A visual exploration of familiar strangeness for Runway. Created with Runway Frames.", image: "img/idx/29_composites.webp" },
+  { id: 30, title: "Cursed", slug: "cursed", year: "2025", tags: ["AI", "Stills"], desc: "An ongoing series using Midjourney’s hidden cursed model. Beauty in corrupted imagery. Not recommended for loved ones.", image: "img/idx/30_cursed.webp" },
+  { id: 31, title: "NTO / Cirrus", slug: "nto-cirrus", year: "2025", tags: ["AI", "Music Video"], desc: "AI visualizer for the Cirrus by NTO.", image: "img/idx/31_nto_cirrus.webp" },
+  { id: 32, title: "NTO / Stratus", slug: "nto-stratus", year: "2025", tags: ["AI", "Music Video"], desc: "AI visualizer for Stratus by NTO.", image: "img/idx/32_nto_stratus.webp" },
+  { id: 33, title: "Spells", slug: "spells", year: "2025", tags: ["AI", "Stills"], desc: "Images generated for the second volume of Spells, a publication dedicated to documenting the practice of pure textual prompting.", image: "img/idx/33_spells.webp" },
+  { id: 34, title: "Memories", slug: "memories", year: "2024", tags: ["AI", "Stills"], desc: "In this in-house art project, we explored the concept of what an AI's memories might looks like.", image: "img/idx/34_memories.webp" },
+  { id: 35, title: "So Much for A Piece of Blue Sky", slug: "so-much-for-a-piece-of-blue-sky", year: "2024", tags: ["AI", "Short Film"], desc: "Coffee, running, metro, small actions hint at something deeper. What does that blue sky mean to each of us?", image: "img/idx/35_so_much_for_a_piece_of_blue_sky.webp" },
+  { id: 36, title: "Nova Carbon", slug: "nova-carbon", year: "2024", tags: ["Graphic Identity", "AI", "Stills"], desc: "For Nova Carbon, whose mission is to democratize the use of carbon fiber by developing high-performance products from carbon fiber waste...", image: "img/idx/36_nova_carbon.webp" },
+  { id: 37, title: "ARTXCODE", slug: "artxcode", year: "2024", tags: ["Graphic Identity", "Digital Design"], desc: "For ARTXCODE, a generative art house founded by Sofia Garcia, UNVEIL® crafted a distinct graphic identity and designed its digital platform. ", image: "img/idx/37_artxcode.webp" },
+  { id: 38, title: "Ellie", slug: "ellie", year: "2024", tags: ["AI", "Short Film"], desc: "'Ellie', the grand-prize winner of the Gen:48 video competition hosted by Runway, is a short film produced in 48 hours.  ", image: "img/idx/38_ellie.webp" },
+  { id: 39, title: "MINIMAXXX / Identity", slug: "minimaxxx-identity", year: "2024", tags: ["Graphic Identity", "Digital Design"], desc: "A polymorphic identity and website for MINIMAXXX, built from shifting logos tied to each pop-up location, with tactile, hand-layered scanning methods.", image: "img/idx/39_minimaxxx_identity.webp" },
+  { id: 40, title: "MINIMAXXX / Posters", slug: "minimaxxx-posters", year: "2024", tags: ["Graphic Identity"], desc: "A full year of MINIMAXXX posters mixing minimal and dense compositions, evolving logos, type experiments and AI textures within one adaptable identity system.", image: "img/idx/40_minimaxxx_posters.webp" },
+  { id: 41, title: "Orenji", slug: "orenji", year: "2023", tags: ["AI", "Stills"], desc: "For Orenji, renowned for its floral-flavored sake, UNVEIL® managed the artistic direction and produced the campaign visuals.   ", image: "img/idx/41_orenji.webp" },
+  { id: 42, title: "Axis Mundi", slug: "axis-mundi", year: "2023", tags: [], desc: "Axis Mundi, UNVEIL®'s largest in-house project, is a gamified artistic experience that merges cinema and video games.", image: "img/idx/42_axis_mundi.webp" },
+];
