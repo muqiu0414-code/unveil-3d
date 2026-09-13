@@ -94,27 +94,13 @@ function shuffle<T>(arr: T[]): T[] {
 }
 const tileData = shuffle(TILES);
 
-// ---- blur helper: build a blurred canvas texture from an image ----
-// Source ships a full-resolution blurred variant of every visual; we fake it
-// with a same-width canvas so the edge frost stays crisp instead of "fogged".
-// Small blur radius = glass edge, not a blurred print.
-function makeBlurTexture(img: HTMLImageElement): THREE.CanvasTexture {
-  const w = img.naturalWidth || 512;
-  const h = Math.max(1, Math.round((img.naturalHeight / img.naturalWidth) * w));
-  const c = document.createElement("canvas");
-  c.width = w;
-  c.height = h;
-  const ctx = c.getContext("2d")!;
-  // Frosted edge: blur the artwork hard so the 0.15 margin mix reads as
-  // matte glass, not a sharp mirror/lens edge. Colour stays true to the
-  // original (no darkening). 40px on a 512px image ≈ visible frosted rim.
-  ctx.filter = "blur(40px)";
-  ctx.drawImage(img, 0, 0, w, h);
-  const tex = new THREE.CanvasTexture(c);
-  tex.colorSpace = THREE.SRGBColorSpace;
-  tex.minFilter = THREE.LinearFilter;
-  tex.generateMipmaps = false;
-  return tex;
+// ---- blur source ----
+// Frosted edge: a build-time gaussian-blurred webp (scripts/optimize-tiles.cjs,
+// σ≈13 ≈ old runtime canvas blur(40px)) is loaded per tile — zero canvas work
+// on the main thread. Path derived from the original src:
+//   img/tiles/x.webp → img/tiles-blur/x.webp
+function blurSrcOf(src: string): string {
+  return src.replace("img/tiles/", "img/tiles-blur/");
 }
 
 // ---- tiles ----
@@ -161,95 +147,121 @@ function buildTile(project: TileData, index: number): void {
   const w = new THREE.Group();
   v.add(w);
 
-  textureLoader.load(
-    project.src,
-    (imageTexture) => {
-      try {
-        imageTexture.colorSpace = THREE.SRGBColorSpace;
-        imageTexture.minFilter = THREE.LinearFilter;
-        imageTexture.generateMipmaps = false;
+  // Both textures load in parallel; the tile only completes when BOTH are in.
+  let imageTexture: THREE.Texture | null = null;
+  let blurTexture: THREE.Texture | null = null;
+  let failed = false;
+  const failCount = (): void => {
+    if (failed) return;
+    failed = true;
+    // still count it so the preloader cannot hang forever
+    tilesReady++;
+    reportProgress();
+    if (tilesReady === totalTiles) {
+      readyListeners.splice(0).forEach((fn) => fn());
+    }
+  };
 
-        const img = imageTexture.image as HTMLImageElement;
-        const be = img.naturalHeight / img.naturalWidth;
-        const fe = 1 - (be - 1) * 0.5;
-        // 0.8 = user-requested shrink by 1/5
-        let W = 1.5 * be * fe * 0.8;
-        let H = 1.5 * fe * 0.8;
+  const finish = (): void => {
+    if (!imageTexture || !blurTexture) return;
+    try {
+      const img = imageTexture.image as HTMLImageElement;
+      const be = img.naturalHeight / img.naturalWidth;
+      const fe = 1 - (be - 1) * 0.5;
+      // 0.8 = user-requested shrink by 1/5
+      let W = 1.5 * be * fe * 0.8;
+      let H = 1.5 * fe * 0.8;
 
-        // Source uses a BoxGeometry with 0.0175 thickness bound to ONE
-        // ShaderMaterial (A = new rn(q, D)) — all 6 faces render the glass
-        // shader. No frosted-black side faces: a side material projected a
-        // dark outline around every panel under the tilted camera.
-        // Edge colour therefore comes 100% from mix(image, blur) and follows
-        // the artwork (dark art → dark edge, light art → light edge).
-        // Thickness halved to 0.008 so the side faces don't rasterise into
-        // a visible aliased sliver under the tilted camera.
-        const geometry = new THREE.BoxGeometry(H, W, 0.008, 1, 1, 1);
-        const blurTexture = makeBlurTexture(img);
+      // Source uses a BoxGeometry with 0.0175 thickness bound to ONE
+      // ShaderMaterial (A = new rn(q, D)) — all 6 faces render the glass
+      // shader. No frosted-black side faces: a side material projected a
+      // dark outline around every panel under the tilted camera.
+      // Edge colour therefore comes 100% from mix(image, blur) and follows
+      // the artwork (dark art → dark edge, light art → light edge).
+      // Thickness halved to 0.008 so the side faces don't rasterise into
+      // a visible aliased sliver under the tilted camera.
+      const geometry = new THREE.BoxGeometry(H, W, 0.008, 1, 1, 1);
 
-        const material = new THREE.ShaderMaterial({
-          vertexShader: GLASS_VERTEX,
-          fragmentShader: GLASS_FRAGMENT,
-          uniforms: {
-            uBlurTexture: { value: blurTexture },
-            uImageTexture: { value: imageTexture },
-            uImageSize: { value: new THREE.Vector2(img.naturalWidth, img.naturalHeight) },
-            uMeshSize: { value: new THREE.Vector2(H, W) },
-            uSaturation: { value: 1 }
-          },
-          transparent: true
-        });
+      const material = new THREE.ShaderMaterial({
+        vertexShader: GLASS_VERTEX,
+        fragmentShader: GLASS_FRAGMENT,
+        uniforms: {
+          uBlurTexture: { value: blurTexture },
+          uImageTexture: { value: imageTexture },
+          uImageSize: { value: new THREE.Vector2(img.naturalWidth, img.naturalHeight) },
+          uMeshSize: { value: new THREE.Vector2(H, W) },
+          uSaturation: { value: 1 }
+        },
+        transparent: true
+      });
 
-        const A = new THREE.Mesh(geometry, material);
-        A.position.x = -(H - 1.5) / 2;
+      const A = new THREE.Mesh(geometry, material);
+      A.position.x = -(H - 1.5) / 2;
 
-        const J = new THREE.Mesh(
-          geometry,
-          new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0, transparent: true, depthWrite: false })
-        );
-        J.scale.x = 1.5;
-        J.visible = true;
+      const J = new THREE.Mesh(
+        geometry,
+        new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0, transparent: true, depthWrite: false })
+      );
+      J.scale.x = 1.5;
+      J.visible = true;
 
-        w.add(A);
-        v.add(J);
-        scene.add(v);
+      w.add(A);
+      v.add(J);
+      scene.add(v);
 
-        const tile: TileLike = {
-          project,
-          mesh: J,
-          imageGroup: w,
-          setHover(h) {
-            if (canHover) {
-              gsap.to(w.position, { x: h ? 0.325 : -0.325, y: h ? -0.1 : 0, ease: "expo.out", duration: 0.5 });
-            } else {
-              gsap.to(w.position, { x: h ? 2 / 3 : 0, y: h ? -0.1 : 0, ease: "expo.out", duration: 0.5 });
-            }
+      const tile: TileLike = {
+        project,
+        mesh: J,
+        imageGroup: w,
+        setHover(h) {
+          if (canHover) {
+            gsap.to(w.position, { x: h ? 0.325 : -0.325, y: h ? -0.1 : 0, ease: "expo.out", duration: 0.5 });
+          } else {
+            gsap.to(w.position, { x: h ? 2 / 3 : 0, y: h ? -0.1 : 0, ease: "expo.out", duration: 0.5 });
           }
-        };
-
-        (J as THREE.Mesh & { userTile?: TileLike }).userTile = tile;
-        hoverMeshes.push(J);
-        tiles.push(tile);
-        tilesReady++;
-        reportProgress();
-        if (tilesReady === totalTiles) {
-          readyListeners.splice(0).forEach((fn) => fn());
         }
-      } catch (err) {
-        console.error("[unveil] tile build failed for", project.src, err);
-      }
-    },
-    undefined,
-    (err) => {
-      console.error("[unveil] image failed to load:", project.src, err);
-      // still count it so the preloader cannot hang forever
+      };
+
+      (J as THREE.Mesh & { userTile?: TileLike }).userTile = tile;
+      hoverMeshes.push(J);
+      tiles.push(tile);
       tilesReady++;
       reportProgress();
       if (tilesReady === totalTiles) {
         readyListeners.splice(0).forEach((fn) => fn());
       }
+    } catch (err) {
+      console.error("[unveil] tile build failed for", project.src, err);
+      failCount();
     }
-  );
+  };
+
+  const onImage = (t: THREE.Texture): void => {
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.minFilter = THREE.LinearFilter;
+    t.generateMipmaps = false;
+    imageTexture = t;
+    finish();
+  };
+  const onBlur = (t: THREE.Texture): void => {
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.minFilter = THREE.LinearFilter;
+    t.generateMipmaps = false;
+    blurTexture = t;
+    finish();
+  };
+
+  textureLoader.load(project.src, onImage, undefined, (err) => {
+    console.error("[unveil] image failed to load:", project.src, err);
+    failCount();
+  });
+  // Static blur webp — if it ever 404s, degrade to the sharp image (edge
+  // frost disappears but the panel still renders; no hard failure).
+  textureLoader.load(blurSrcOf(project.src), onBlur, undefined, (err) => {
+    console.error("[unveil] blur failed to load:", blurSrcOf(project.src), err);
+    blurTexture = imageTexture;
+    finish();
+  });
 }
 
 tileData.forEach((p, i) => buildTile(p, i));

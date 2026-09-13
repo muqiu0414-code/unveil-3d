@@ -218,6 +218,26 @@ v.visible = z < 12.5 && z > -12.5;
 2. **悬停滑出动画从未生效**——`setHover()` 方法定义了但无人调用，悬停只更新标签不滑动面板。在 hover 变更处补 `tile.setHover(true/false)`。
 3. **合成事件下 pointerdown 报错**——`e.target.closest` 在 target 非 Element 时抛异常，加 `typeof closest === "function"` 守卫（真实用户点击不受影响）。
 
+### 6.4 终版性能优化（170 张全量时代，参考 muqiu-personal treasury 性能日志，2026-09-13）
+
+> 170 张图全量加载后，旧 6.1–6.2 的"12 张图"数据已过时。此轮以 `personal-website/docs/10-treasury.md` §4.1 的性能优化日志为参照（同为 unveil 3D 画廊场景），落地四件事，**UI/视觉零改动**。
+
+| 措施 | 实现 | 收益（实测生产 4174） |
+|---|---|---|
+| **blur 纹理静态化（核心）** | 删除运行时 `makeBlurTexture`（canvas `blur(40px)` 同步计算）；`scripts/optimize-tiles.cjs` 用 sharp 预生成 `public/img/tiles-blur/*.webp`（σ=13 ≈ 旧 canvas blur(40px)，同尺寸），buildTile 并行加载原图+blur 两张（blur 路径由 src 推导 `img/tiles/→img/tiles-blur/`） | **170 次主线程 canvas 高斯模糊全部消除**（旧版每次 blur 是同步 CPU 大头）；blur 图加载失败自动降级为原图，不阻塞 |
+| **原图重压缩** | 同一脚本 sharp webp **q70 覆盖**（512px 宽） | 图片体积 **19.6MB → 2.4MB（-88%，平均 118KB→15KB）**；blur 集另加 0.4MB |
+| **Brotli 动态压缩** | serve.cjs 对 html/js/css/svg/json/txt 用 Node zlib `brotliCompressSync`（按 path+size+mtime 缓存，容量 64 上限） | JS chunk **72KB → 9KB（-87%）**；文本类资源全量 Brotli |
+| **缓存策略细化** | `dist/assets/*.<hash>.js/css` 识别为 immutable（带 hash 永不变化），图片/字体保持 immutable，index.html no-cache | 二次访问连 JS 也走缓存，WARM 实测 **0.87s** |
+
+**实测（生产构建 + 4174，浏览器冷/温缓存分测，绕过 bfcache）**：
+
+- 冷首载（清浏览器缓存全量下载）：**1.10s**（旧版 19.6MB + 170 次 canvas blur，preloader 需停留数秒）
+- 温二次：**0.87s**
+- dist 体积：**21.9MB → 5.1MB**
+- 视觉回归：源站/本站并排对比，斜向层叠、磨砂边缘、导航/底部按钮全部一致（无退化）
+
+**与 treasury 日志方案的差异（本项目取舍）**：treasury 用 σ12/18 双 blur + 槽位化虚拟加载 + `entranceLocked`；本项目 blur 单 σ13 已覆盖源站视觉（单材质单 blur），未做槽位化（170 张全量仅 2.8MB，全量加载已达标 1.1s，保留源站"全部就绪才入场"的行为不变，不动 UI）。
+
 ---
 
 ## 七、验证过程（自查）
